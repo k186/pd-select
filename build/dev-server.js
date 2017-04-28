@@ -1,65 +1,89 @@
-const path = require('path');
-const webpack = require("webpack");
-const webpackConfig = require("./webpack.dev.config");
-const config = require('../config');
+require('./check-versions')()
 
-const opn = require('opn');
-const express = require("express");
-const webpackDevMiddleware = require("webpack-dev-middleware");
-const webpackHotMiddleware = require("webpack-hot-middleware");
-const url = 'http://localhost:' + config.dev.port;
-const app = express();
+var config = require('../config')
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
+}
 
-const compiler = webpack(webpackConfig);
+var opn = require('opn')
+var path = require('path')
+var express = require('express')
+var webpack = require('webpack')
+var proxyMiddleware = require('http-proxy-middleware')
+var webpackConfig = require('./webpack.dev.conf')
 
-//https://github.com/webpack/webpack-dev-middleware
-const DevMiddleware =  webpackDevMiddleware(compiler, {
+// default port where dev server listens for incoming traffic
+var port = process.env.PORT || config.dev.port
+// automatically open browser, if not set will be false
+var autoOpenBrowser = !!config.dev.autoOpenBrowser
+// Define HTTP proxies to your custom API backend
+// https://github.com/chimurai/http-proxy-middleware
+var proxyTable = config.dev.proxyTable
+
+var app = express()
+var compiler = webpack(webpackConfig)
+
+var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
-  //noInfo: false,
-  // display no info to console (only warnings and errors)
-  quiet: true,
-  // display nothing to the console
-});
-// https://github.com/glenjamin/webpack-hot-middleware/blob/master/example/server.js
-const HotMiddleware = webpackHotMiddleware(compiler, {
-  //log:console.log, clean the terminal
-  log: () => {},
-  //path: '/__webpack_hmr',
-  //heartbeat: 10 * 1000
-});
+  quiet: true
+})
 
-//force reload when html-webpack-plugin changes
-//more https://github.com/jantimon/html-webpack-plugin
+var hotMiddleware = require('webpack-hot-middleware')(compiler, {
+  log: () => {}
+})
+// force page reload when html-webpack-plugin template changes
 compiler.plugin('compilation', function (compilation) {
-  //console.log('The html-webpack-plugin is starting a new compilation...');
-  compilation.plugin('html-webpack-plugin-after-emit', function (htmlPluginData, callback) {
-    HotMiddleware.publish({action: 'reload'});
-    callback();
-  });
-});
+  compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
+    hotMiddleware.publish({ action: 'reload' })
+    cb()
+  })
+})
 
-//https://segmentfault.com/a/1190000007890379
+// proxy api requests
+Object.keys(proxyTable).forEach(function (context) {
+  var options = proxyTable[context]
+  if (typeof options === 'string') {
+    options = { target: options }
+  }
+  app.use(proxyMiddleware(options.filter || context, options))
+})
+
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
 
-app.use(DevMiddleware);
-app.use(HotMiddleware);
+// serve webpack bundle output
+app.use(devMiddleware)
 
-//http://expressjs.com/en/starter/static-files.html
-const staticPath = path.posix.join(config.dev.staticPublishPath, config.dev.staticSubDirectory);
-app.use(staticPath, express.static('./static'));
+// enable hot-reload and state-preserving
+// compilation error display
+app.use(hotMiddleware)
 
+// serve pure static assets
+var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+app.use(staticPath, express.static('./static'))
 
-//https://github.com/webpack/webpack-dev-middleware  Advanced API
-DevMiddleware.waitUntilValid(function () {
-  console.log(">>Listening at " + url + '\n');
-});
-app.listen(8080, function (err) {
-  if (err) {
-    console.log(err);
-    return
+var uri = 'http://localhost:' + port
+
+var _resolve
+var readyPromise = new Promise(resolve => {
+  _resolve = resolve
+})
+
+console.log('> Starting dev server...')
+devMiddleware.waitUntilValid(() => {
+  console.log('> Listening at ' + uri + '\n')
+  // when env is testing, don't need open it
+  if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
+    opn(uri)
   }
-   if(config.dev.autoOpenBrowser){
-   opn(url);
-   }
-});
+  _resolve()
+})
+
+var server = app.listen(port)
+
+module.exports = {
+  ready: readyPromise,
+  close: () => {
+    server.close()
+  }
+}

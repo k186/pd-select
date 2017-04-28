@@ -1,19 +1,21 @@
-const path = require('path');
-const config = require('../config');
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+var path = require('path')
+var config = require('../config')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-exports.staticPath = function (_path) {
-  let staticSubDirectory = process.env.NODE_ENV === '"production"'
-    ? config.build.staticSubDirectory
-    : config.dev.staticSubDirectory
-  return path.posix.join(staticSubDirectory, _path)
+exports.assetsPath = function (_path) {
+  var assetsSubDirectory = process.env.NODE_ENV === 'production'
+    ? config.build.assetsSubDirectory
+    : config.dev.assetsSubDirectory
+  return path.posix.join(assetsSubDirectory, _path)
 }
+
 exports.cssLoaders = function (options) {
   options = options || {}
+
   var cssLoader = {
     loader: 'css-loader',
     options: {
-      minimize: process.env.NODE_ENV === '"production"',
+      minimize: process.env.NODE_ENV === 'production',
       sourceMap: options.sourceMap
     }
   }
@@ -42,12 +44,12 @@ exports.cssLoaders = function (options) {
     }
   }
 
-  // http://vuejs.github.io/vue-loader/en/configurations/extract-css.html
+  // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
     postcss: generateLoaders(),
     less: generateLoaders('less'),
-    sass: generateLoaders('sass', {indentedSyntax: true}),
+    sass: generateLoaders('sass', { indentedSyntax: true }),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
