@@ -85,13 +85,28 @@
           transform: `rotate3d(1, 0, 0, ${-index * 20 % 360}deg) translate3d(0px, 0px, 100px)`
         }
       },
-      setWheelDeg (updateDeg) {
-        this.$refs.wheel.style.webkitTransform = `rotate3d(1, 0, 0, ${updateDeg}deg)`
+      setWheelDeg (updateDeg, type, time = 1000) {
+        if (type === 'end') {
+          this.$refs.wheel.style.webkitTransition = `transform ${time}ms cubic-bezier(0.19, 1, 0.22, 1)`
+          this.$refs.wheel.style.webkitTransform = `rotate3d(1, 0, 0, ${updateDeg}deg)`
+        } else {
+          this.$refs.wheel.style.webkitTransition = ''
+          this.$refs.wheel.style.webkitTransform = `rotate3d(1, 0, 0, ${updateDeg}deg)`
+        }
       },
-      setListTransform (translateY = 0, marginTop = 0) {
-        this.$refs.list.style.webkitTransform = `translateY(${translateY - this.spin.branch * 34}px)`
-        this.$refs.list.style.marginTop = `${-marginTop}px`
-        this.$refs.list.setAttribute('scroll', translateY)
+      setListTransform (translateY = 0, marginTop = 0, type, time = 1000) {
+        if (type === 'end') {
+          this.$refs.list.style.webkitTransition = `transform ${time}ms cubic-bezier(0.19, 1, 0.22, 1)`
+          this.$refs.list.style.webkitTransform = `translateY(${translateY - this.spin.branch * 34}px)`
+          this.$refs.list.style.marginTop = `${-marginTop}px`
+          this.$refs.list.setAttribute('scroll', translateY)
+          console.log('end')
+        } else {
+          this.$refs.list.style.webkitTransition = ''
+          this.$refs.list.style.webkitTransform = `translateY(${translateY - this.spin.branch * 34}px)`
+          this.$refs.list.style.marginTop = `${-marginTop}px`
+          this.$refs.list.setAttribute('scroll', translateY)
+        }
       },
       itemTouchStart (event) {
         let finger = event.changedTouches[0]
@@ -105,7 +120,6 @@
         this.finger.lastY = finger.pageY
         this.finger.lastTime = event.timestamp || Date.now()
         /* 设置css */
-        // todo
         let move = this.finger.lastY - this.finger.startY
         this.setStyle(move)
         event.preventDefault()
@@ -114,21 +128,54 @@
         let finger = event.changedTouches[0]
         this.finger.lastY = finger.pageY
         this.finger.lastTime = event.timestamp || Date.now()
+        let move = this.finger.lastY - this.finger.startY
+        /* 计算速度 */
+        /* 速度计算说明
+         * 当时间小于300毫秒 最后的移动距离等于 move + 减速运动距离
+         * */
+        let time = this.finger.lastTime - this.finger.startTime
+        let v = move / time
+        /* 减速加速度a */
+        let a = 1.8
         /* 设置css */
-        // todo
+        if (time <= 300) {
+          move = v * a * time
+          time = 1000 + time * a
+          this.setStyle(move, 'end', time)
+        } else {
+          this.setStyle(move, 'end')
+        }
       },
       /* 设置css */
-      setStyle (move, type) {
+      setStyle (move, type, time) {
         // let time = this.finger.startTime - this.finger.lastTime
         const singleHeight = 34
-        const singleDeg = 20 / singleHeight
+        const deg = 20
+        const singleDeg = deg / singleHeight
         let currentListMove = this.finger.transformY
         let updateMove = move + Number(currentListMove)
+        /* 根据滚轮类型 line or cycle 判断 updateMove最大距离 */
+        if (this.type === 'line') {
+          if (updateMove > 0) {
+            updateMove = 0
+          }
+          if (updateMove < -(this.listData.length - 1) * singleHeight) {
+            updateMove = -(this.listData.length - 1) * singleHeight
+          }
+        }
         let updateDeg = -updateMove * singleDeg
         let spinAim = Math.round(updateDeg / 20)
         let margin = Math.round(updateMove / singleHeight) * singleHeight // 如果不这么写 会导致没有滚动效果
-        this.setListTransform(updateMove, margin)
-        this.setWheelDeg(updateDeg)
+        /* 计算touchEnd移动的整数距离 */
+        let endMove = margin
+        let endDeg = Math.round(updateDeg / deg) * deg
+        if (type === 'end') {
+          this.setListTransform(endMove, margin, type, time)
+          this.setWheelDeg(endDeg, type, time)
+        } else {
+          this.setListTransform(updateMove, margin)
+          this.setWheelDeg(updateDeg)
+        }
         this.updateSpin(spinAim)
       },
       /* 更新spin */
