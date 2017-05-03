@@ -275,6 +275,9 @@
         text-shadow: 0 1px 1px rgba(102, 102, 102, 0.6);
       }
       &-list-item, &-wheel-item {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         line-height: 34px;
         font-size: 18px;
         color: $color-text-main;
@@ -287,9 +290,6 @@
         transform-style: preserve-3d;
         height: 34px;
         &-item {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
           backface-visibility: hidden;
           position: absolute;
           top: 0;
