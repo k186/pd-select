@@ -12,19 +12,24 @@
   </div>
 </template>
 <script>
+  /**
+   * Created by k186 on 2017/5/3.
+   * gitHub: https://github.com/k186/iosSelect
+   */
+
   /*
    * selectItem components
    *
-   * @param value {String} current select value or default value
+   * @param value {String} current select value or init value
    * @param data {Array} loop array value
-   * @param type {String} 'cycle' ,another 'line'
+   * @param type {String} 'cycle' ,default 'line'
    *
    * */
   export default{
     name: 'pdSelectItem',
     data () {
       return {
-        spin: {start: 0, end: 9, branch: 9},
+        spin: {start: -9, end: 9, branch: 9},
         finger: {startY: 0, lastY: 0, startTime: 0, lastTime: 0, transformY: 0}
       }
     },
@@ -53,23 +58,22 @@
       }
     },
     mounted () {
-      /* setTimeout(() => {
-       this.$emit('input', 10)
-       }) */
-
-      /* 判断 cycle 还是line */
-      if (this.type === 'line') {
-        this.spin = {start: -9, end: 9, branch: 9}
-      } else {
-        this.spin = {start: -9, end: 9, branch: 9}
-      }
       /* 事件绑定 */
       this.$el.addEventListener('touchstart', this.itemTouchStart)
       this.$el.addEventListener('touchmove', this.itemTouchMove)
       this.$el.addEventListener('touchend', this.itemTouchEnd)
       /* 初始化状态 */
-      // this.setWheelDeg(this.listData.indexOf(this.value))
-      this.setListTransform()
+      let index = this.listData.indexOf(this.value)
+      if (index === -1) {
+        console.warn('当前初始值不存在，请检查后listData范围！！')
+        this.setListTransform()
+        this.getPickValue(0)
+      } else {
+        let move = index * 34
+        /* 因为往上滑动所以是负 */
+        this.setStyle(-move)
+        this.setListTransform(-move, -move)
+      }
     },
     methods: {
       /* 根据type 控制滚轮显示效果 */
@@ -100,7 +104,6 @@
           this.$refs.list.style.webkitTransform = `translateY(${translateY - this.spin.branch * 34}px)`
           this.$refs.list.style.marginTop = `${-marginTop}px`
           this.$refs.list.setAttribute('scroll', translateY)
-          console.log('end')
         } else {
           this.$refs.list.style.webkitTransition = ''
           this.$refs.list.style.webkitTransform = `translateY(${translateY - this.spin.branch * 34}px)`
@@ -112,8 +115,8 @@
         let finger = event.changedTouches[0]
         this.finger.startY = finger.pageY
         this.finger.startTime = event.timestamp || Date.now()
-        // this.finger.transformY = this.$refs.list.style.transform.replace(/[^0-9\-,]/g, '').split(',')[0]
         this.finger.transformY = this.$refs.list.getAttribute('scroll')
+        event.preventDefault()
       },
       itemTouchMove (event) {
         let finger = event.changedTouches[0]
@@ -148,7 +151,6 @@
       },
       /* 设置css */
       setStyle (move, type, time) {
-        // let time = this.finger.startTime - this.finger.lastTime
         const singleHeight = 34
         const deg = 20
         const singleDeg = deg / singleHeight
@@ -172,6 +174,8 @@
         if (type === 'end') {
           this.setListTransform(endMove, margin, type, time)
           this.setWheelDeg(endDeg, type, time)
+          /* 设置$emit 延迟 */
+          setTimeout(() => this.getPickValue(endMove), 1000)
         } else {
           this.setListTransform(updateMove, margin)
           this.setWheelDeg(updateDeg)
@@ -187,6 +191,12 @@
       getSpinData (index) {
         index = index % this.listData.length
         return this.listData[index >= 0 ? index : index + this.listData.length]
+      },
+      /* 获取选中值 */
+      getPickValue (move) {
+        let index = Math.abs(move / 34)
+        let pickValue = this.getSpinData(index)
+        this.$emit('input', pickValue)
       }
     },
     beforeDestroy () {
@@ -196,7 +206,7 @@
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped="">
   html {
     font-family: 'PingFang SC', 'Helvetica Neue', 'Helvetica', 'STHeitiSC-Light', 'Arial', sans-serif;
     line-height: 1.8;
@@ -214,6 +224,7 @@
         text-align: center;
         height: 220px;
         background: $color-background;
+        position: relative;
       }
       &-ul {
         position: relative;
