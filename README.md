@@ -13,7 +13,7 @@ npm run dev
 npm run build
 
 ```
-###props
+### props
 ```
   @param value {String} current select value or init value
   @param data {Array} loop array value
@@ -21,7 +21,7 @@ npm run build
 ```
  
    
-###[demo](https://www.k186studio.com/demos/iosPicker/)
+### [demo](https://www.k186studio.com/demos/iosPicker/)
 
 
-###[how i build this](https://segmentfault.com/a/1190000004511992)
+### [how i build this](https://segmentfault.com/a/1190000004511992)
