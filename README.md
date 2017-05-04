@@ -24,4 +24,4 @@ npm run build
 ### [demo](https://www.k186studio.com/demos/iosPicker/)
 
 
-### [how i build this](https://segmentfault.com/a/1190000004511992)
+### [how i build this](https://segmentfault.com/a/1190000009276918)
