@@ -21,7 +21,7 @@
    * selectItem components
    *
    * @param value {String} current select value or init value
-   * @param data {Array} loop array value
+   * @param listData {Array} loop array value
    * @param type {String} 'cycle' ,default 'line'
    *
    * */
