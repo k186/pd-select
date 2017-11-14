@@ -18,58 +18,6 @@ npm run build
 npm i pd-select -S
 
 ```
-###CDN
-```
- <!-- CSS -->
- <link rel="stylesheet" href="https://unpkg.com/pd-select/dist/pdSelect.css">
- <!-- JS LIB -->
- <script src="https://unpkg.com/pd-select/dist/pdSelect.js"></script>
-```
-
-
-###Hello world
-```html
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-   <!-- CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/pd-select/dist/pdSelect.css">
-</head>
-<body>
-  <div id="app">
-      <div>
-          <div>pickedValue: {{month}}</div>
-          <div>pickedValue: {{day}}</div>
-          <pd-select-box style="position: fixed;bottom: 0;width: 100%">
-              <pd-select-item :listData="listData" v-model="month"></pd-select-item>
-              <pd-select-item :listData="listData2" type="cycle" v-model="day"></pd-select-item>
-          </pd-select-box>
-      </div>
-  </div>
-</body>
-  <!-- vue -->
-  <script src="https://unpkg.com/vue/dist/vue.js"></script>
-  <!-- JS LIB -->
-  <script src="https://unpkg.com/pd-select/dist/pdSelect.js"></script>
-  <script>
-    new Vue({
-      el: '#app',
-      data:{
-         listData:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
-         listData2:['customValue0','customValue1','customValue2','customValue3','customValue4'],
-         month: 100,
-         day: 'customValue0'
-       },
-       components: {
-        'pd-select-box': pdSelectItem.pdSelectItem,
-        'pd-select-item': pdSelectBox.pdSelectBox
-       }
-    })
-  </script>
-</html>
-```
-
 
 ###example
 ```

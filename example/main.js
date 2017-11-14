@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import App from './app.vue'
 import pdUI from '../dist/pdSelect'
-debugger
-
-
+/*import pdUI from 'pd-select'*/
 
 Vue.use(pdUI)
 
