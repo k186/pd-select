@@ -19,7 +19,7 @@ npm i pd-select -S
 
 ```
 
-###example
+### example
 ```
 import pdSelect from 'pd-select'
 
