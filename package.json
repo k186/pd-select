@@ -1,21 +1,38 @@
 {
-  "name": "pandaUIMobile",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "name": "pd-select",
+  "version": "1.0.0",
+  "description": "a vue component,mobile wheel picker",
+  "main": "dist/pdSelect.js",
   "scripts": {
     "build": "node build/build.js",
-    "dev": "node build/dev-server.js"
+    "dev": "node build/dev-server.js",
+    "compile": "node build/npm/build.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/k186/iosSelect.git"
+  },
+  "keywords": [
+    "vue",
+    "compoent",
+    "picker",
+    "wheel",
+    "datepicker",
+    "mobile",
+    "roll"
+  ],
+  "author": "k186 <k1868548@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/k186/iosSelect/issues"
+  },
+  "homepage": "https://github.com/k186/iosSelect#readme",
   "dependencies": {
-    "node-sass": "^4.5.2",
-    "sass-loader": "^6.0.3",
     "vue": "^2.2.6"
   },
   "devDependencies": {
+    "node-sass": "^4.5.2",
+    "sass-loader": "^6.0.3",
     "autoprefixer": "^6.7.2",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
