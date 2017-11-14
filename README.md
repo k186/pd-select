@@ -1,3 +1,5 @@
+[![npm](https://img.shields.io/npm/v/pd-select.svg)](https://www.npmjs.com/package/pd-select)
+
 
 ### [demo](https://www.k186studio.com/demos/iosPicker/)
 
