@@ -1,4 +1,6 @@
-you may have problem with sass-node,please try vpn if you are in china.
+
+### [demo](https://www.k186studio.com/demos/iosPicker/)
+
 
 Build Setup
 
@@ -25,6 +27,31 @@ import pdSelect from 'pd-select'
 
 Vue.use(pdSelect)
 
+//other code
+
+<template>
+  <div>
+    <div>pickedValue: {{month}}</div>
+    <div>pickedValue: {{day}}</div>
+    <pd-select-box style="position: fixed;bottom: 0;width: 100%">
+      <pd-select-item :listData="listData" v-model="month"></pd-select-item>
+      <pd-select-item :listData="listData2" type="cycle" v-model="day"></pd-select-item>
+    </pd-select-box>
+  </div>
+</template>
+<script>
+  export default{
+    name: 'app',
+    data () {
+      return {
+        listData: Array.from({length: 12}, (value, index) => 1 + index),
+        listData2: Array.from({length: 30}, (value, index) => 'customValue' + index),
+        month: 100,
+        day: 'customValue0'
+      }
+    }
+  }
+</script>
 
 ```
 
@@ -37,7 +64,7 @@ Vue.use(pdSelect)
 ```
  
    
-### [demo](https://www.k186studio.com/demos/iosPicker/)
+
 
 
 ### [how i build this](https://segmentfault.com/a/1190000009276918)
