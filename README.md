@@ -14,21 +14,17 @@ npm run build
 
 ```
 ### install
-推荐使用npm 的安装方式,它能更好的和webpack打包工具配合使用。
 ```
 npm i pd-select -S
 
 ```
 ###CDN
-目前可以通过 unpkg.com/pd-select 获取到最新版本的资源，在页面上引入 js 和 css 文件即可开始使用
 ```
- <!-- 引入样式 -->
+ <!-- CSS -->
  <link rel="stylesheet" href="https://unpkg.com/pd-select/dist/pdSelect.css">
- <!-- 引入组件库 -->
+ <!-- JS LIB -->
  <script src="https://unpkg.com/pd-select/dist/pdSelect.js"></script>
 ```
-
-我们建议使用 CDN 引入 pd-select 的用户在链接地址上锁定版本，以免将来 pd-select 升级时受到非兼容性更新的影响。锁定版本的方法请查看 unpkg.com。
 
 
 ###Hello world
@@ -37,7 +33,7 @@ npm i pd-select -S
 <html>
 <head>
   <meta charset="UTF-8">
-  <!-- 引入样式 -->
+   <!-- CSS -->
   <link rel="stylesheet" href="https://unpkg.com/pd-select/dist/pdSelect.css">
 </head>
 <body>
@@ -52,9 +48,9 @@ npm i pd-select -S
       </div>
   </div>
 </body>
-  <!-- 先引入 Vue -->
+  <!-- vue -->
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
-  <!-- 引入组件库 -->
+  <!-- JS LIB -->
   <script src="https://unpkg.com/pd-select/dist/pdSelect.js"></script>
   <script>
     new Vue({
