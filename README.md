@@ -14,11 +14,6 @@
 | Chrome for Android    | >=62         |
 | Samsung Internet    | >=6.2         |
 
-作者：larryzhao
-链接：https://www.jianshu.com/p/sTeAbC
-來源：简书
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
 
 Build Setup
 
