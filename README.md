@@ -78,3 +78,11 @@ Vue.use(pdSelect)
 
 
 ### [how i build this](https://segmentfault.com/a/1190000009276918)
+
+
+### todo 2.0
+支持 点击
+touch 事件换hammerjs
+webapack 构建
+极限 缓动
+
