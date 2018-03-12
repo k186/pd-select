@@ -21,8 +21,8 @@ Build Setup
 # install dependencies
 npm install
 
-# build for production with minification
-npm run compile
+# run dev
+npm run dev
 
 ```
 ### install

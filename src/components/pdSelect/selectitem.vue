@@ -25,7 +25,7 @@
    * @param type {String} 'cycle' ,default 'line'
    *
    * */
-  export default{
+  export default {
     name: 'pdSelectItem',
     data () {
       return {
@@ -62,20 +62,28 @@
       this.$el.addEventListener('touchstart', this.itemTouchStart)
       this.$el.addEventListener('touchmove', this.itemTouchMove)
       this.$el.addEventListener('touchend', this.itemTouchEnd)
-      /* 初始化状态 */
-      let index = this.listData.indexOf(this.value)
-      if (index === -1) {
-        console.warn('当前初始值不存在，请检查后listData范围！！')
-        this.setListTransform()
-        this.getPickValue(0)
-      } else {
-        let move = index * 34
-        /* 因为往上滑动所以是负 */
-        this.setStyle(-move)
-        this.setListTransform(-move, -move)
-      }
+      this.init()
     },
     methods: {
+      /* 初始化状态 */
+      init (type) {
+        if(type){
+
+        }else {
+          let index = this.listData.indexOf(this.value)
+          if (index === -1) {
+            console.warn('当前初始值不存在，请检查后listData范围！！')
+            this.setListTransform()
+            this.getPickValue(0)
+          } else {
+            let move = index * 34
+            /* 因为往上滑动所以是负 */
+            this.setStyle(-move)
+            this.setListTransform(-move, -move)
+          }
+        }
+
+      },
       /* 根据type 控制滚轮显示效果 */
       setHidden (index) {
         if (this.type === 'line') {
@@ -199,6 +207,15 @@
         this.$emit('input', pickValue)
       }
     },
+    watch: {
+      value (val, oldValue) {
+//        if (val != oldValue) {
+//          //todo 会触发重复渲染，零时这样处理 需要对渲染函数做修改
+//          Object.assign(this.$data, this.$options.data());
+//          this.init(false);
+//        }
+      }
+    },
     beforeDestroy () {
       this.$el.removeEventListener('touchstart', this.itemTouchStart)
       this.$el.removeEventListener('touchmove', this.itemTouchMove)
@@ -225,6 +242,11 @@
         height: 220px;
         background: $color-background;
         position: relative;
+        & ul, li {
+          padding: 0;
+          list-style: none;
+          margin: 0;
+        }
       }
       &-ul {
         position: relative;
