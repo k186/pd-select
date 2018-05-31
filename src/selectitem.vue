@@ -194,7 +194,7 @@
       },
       /* 获取选中值 */
       getPickValue (move) {
-        let index = Math.abs(move / 34)
+        let index = Math.round( Math.abs(move / 34) )
         let pickValue = this.getSpinData(index)
         this.$emit('input', pickValue)
       }
