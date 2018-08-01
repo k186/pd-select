@@ -91,8 +91,9 @@ Vue.use(pdSelect)
 ```
 use $refs to manual trigger component's init event to update view just like demo
 ```
+### Buy me a cup of coffee
 
-
+![buycoffee](http://okzvi7b4z.bkt.clouddn.com/image/github/buymecoffee/ali.png720342734073738498.jpg)
 
 ### [how i build this](https://segmentfault.com/a/1190000009276918)
 
@@ -106,3 +107,5 @@ touch 事件换hammerjs
 
 ~~极限 缓动~~
 ~~支持手动初始化~~
+
+
