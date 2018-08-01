@@ -93,7 +93,7 @@ use $refs to manual trigger component's init event to update view just like demo
 ```
 ### Buy me a cup of coffee
 
-![buycoffee](http://okzvi7b4z.bkt.clouddn.com/image/github/buymecoffee/ali.png720342734073738498.jpg=60x90)
+![buycoffee](http://okzvi7b4z.bkt.clouddn.com/image/github/buymecoffee/ali.png720342734073738498.jpg =60x90)
 
 ### [how i build this](https://segmentfault.com/a/1190000009276918)
 
