@@ -85,6 +85,6 @@ Vue.use(pdSelect)
 
 touch 事件换hammerjs
 
-webapack 构建
+~~webapack 构建~~
 
-极限 缓动
+~~极限 缓动~~

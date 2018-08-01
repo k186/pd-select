@@ -71,22 +71,20 @@
     methods: {
       /* 初始化状态 */
       init(type) {
-        if (type) {
-
-        } else {
-          let index = this.listData.indexOf(this.value)
+        let index, move
+        if (!type) {
+          index = this.listData.indexOf(this.value)
           if (index === -1) {
             console.warn('当前初始值不存在，请检查后listData范围！！')
             this.setListTransform()
             this.getPickValue(0)
           } else {
-            let move = index * 34
+            move = index * 34
             /* 因为往上滑动所以是负 */
             this.setStyle(-move)
             this.setListTransform(-move, -move)
           }
         }
-
       },
       /* 根据type 控制滚轮显示效果 */
       setHidden(index) {
@@ -168,8 +166,10 @@
         const singleDeg = deg / singleHeight
         let currentListMove = this.finger.transformY
         let updateMove = move + Number(currentListMove)
-        /* 根据滚轮类型 line or cycle 判断 updateMove最大距离 */
-        if (this.type === 'line') {
+        let updateDeg, spinAim, margin, endMove, endDeg
+        if (type === 'end') {
+          /*这里只在释放的时候判断 实现缓动效果*/
+          /* 根据滚轮类型 line or cycle 判断 updateMove最大距离 */
           if (updateMove > 0) {
             updateMove = 0
           }
@@ -177,12 +177,14 @@
             updateMove = -(this.listData.length - 1) * singleHeight
           }
         }
-        let updateDeg = -updateMove * singleDeg
-        let spinAim = Math.round(updateDeg / 20)
-        let margin = Math.round(updateMove / singleHeight) * singleHeight // 如果不这么写 会导致没有滚动效果
+        //todo 这里考虑后续设置能最大缓动的值 目前暂时不考虑
+
+        updateDeg = -updateMove * singleDeg
+        spinAim = Math.round(updateDeg / 20)
+        margin = Math.round(updateMove / singleHeight) * singleHeight // 如果不这么写 会导致没有滚动效果
         /* 计算touchEnd移动的整数距离 */
-        let endMove = margin
-        let endDeg = Math.round(updateDeg / deg) * deg
+        endMove = margin
+        endDeg = Math.round(updateDeg / deg) * deg
         if (type === 'end') {
           this.setListTransform(endMove, margin, type, time)
           this.setWheelDeg(endDeg, type, time)

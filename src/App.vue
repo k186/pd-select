@@ -15,17 +15,18 @@
         listData: Array.from({length: 12}, (value, index) => 1 + index),
         listData2: Array.from({length: 30}, (value, index) => 'customValue' + index),
         month: 100,
-        day: 'customValue0'
+        day: 'customValue15'
       }
     },
     mounted(){
       setTimeout(()=>{
+        //验证 model 联动
         this.after()
       },3000)
     },
     methods: {
       after () {
-        this.day = 'customValue15'
+        this.day = 'customValue0'
       }
     }
   }
