@@ -215,15 +215,6 @@
         this.$emit('input', pickValue)
       }
     },
-    watch: {
-      value(val, oldValue) {
-//        if (val != oldValue) {
-//          //todo 会触发重复渲染，零时这样处理 需要对渲染函数做修改
-//          Object.assign(this.$data, this.$options.data());
-//          this.init(false);
-//        }
-      }
-    },
     beforeDestroy() {
       this.$el.removeEventListener('touchstart', this.itemTouchStart)
       this.$el.removeEventListener('touchmove', this.itemTouchMove)
