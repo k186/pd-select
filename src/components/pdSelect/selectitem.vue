@@ -3,11 +3,15 @@
     <div class="pd-select-line"></div>
     <div class="pd-select-list">
       <ul class="pd-select-ul" ref="list">
-        <li class="pd-select-list-item" v-for="el,index in renderData " :class="{'hidden':setHidden(el.index)}" :key="index">{{el.value}}</li>
+        <li class="pd-select-list-item" v-for="el,index in renderData " :class="{'hidden':setHidden(el.index)}"
+            :key="index">{{el.value}}
+        </li>
       </ul>
     </div>
     <ul class="pd-select-wheel" ref="wheel">
-      <li class="pd-select-wheel-item" :class="{'hidden':setHidden(el.index)}" :style="setWheelItemDeg(el.index)" :index="el.index" v-for="el,index in renderData " :key="index">{{el.value}}</li>
+      <li class="pd-select-wheel-item" :class="{'hidden':setHidden(el.index)}" :style="setWheelItemDeg(el.index)"
+          :index="el.index" v-for="el,index in renderData " :key="index">{{el.value}}
+      </li>
     </ul>
   </div>
 </template>
@@ -25,9 +29,9 @@
    * @param type {String} 'cycle' ,default 'line'
    *
    * */
-  export default{
+  export default {
     name: 'pdSelectItem',
-    data () {
+    data() {
       return {
         spin: {start: -9, end: 9, branch: 9},
         finger: {startY: 0, lastY: 0, startTime: 0, lastTime: 0, transformY: 0}
@@ -45,7 +49,7 @@
       value: {}
     },
     computed: {
-      renderData () {
+      renderData() {
         let temp = []
         for (let k = this.spin.start; k <= this.spin.end; k++) {
           let data = {
@@ -57,39 +61,47 @@
         return temp
       }
     },
-    mounted () {
+    mounted() {
       /* 事件绑定 */
       this.$el.addEventListener('touchstart', this.itemTouchStart)
       this.$el.addEventListener('touchmove', this.itemTouchMove)
       this.$el.addEventListener('touchend', this.itemTouchEnd)
-      /* 初始化状态 */
-      let index = this.listData.indexOf(this.value)
-      if (index === -1) {
-        console.warn('当前初始值不存在，请检查后listData范围！！')
-        this.setListTransform()
-        this.getPickValue(0)
-      } else {
-        let move = index * 34
-        /* 因为往上滑动所以是负 */
-        this.setStyle(-move)
-        this.setListTransform(-move, -move)
-      }
+      this.init()
     },
     methods: {
+      /* 初始化状态 */
+      init(type) {
+        let index, move
+        this.$nextTick(()=>{
+          if (!type) {
+            index = this.listData.indexOf(this.value)
+            if (index === -1) {
+              console.warn('当前初始值不存在，请检查后listData范围！！')
+              this.setListTransform()
+              this.getPickValue(0)
+            } else {
+              move = index * 34
+              /* 因为往上滑动所以是负 */
+              this.setStyle(-move)
+              this.setListTransform(-move, -move)
+            }
+          }
+        })
+      },
       /* 根据type 控制滚轮显示效果 */
-      setHidden (index) {
+      setHidden(index) {
         if (this.type === 'line') {
           return index < 0 || index > this.listData.length - 1
         } else {
           return false
         }
       },
-      setWheelItemDeg (index) {
+      setWheelItemDeg(index) {
         return {
           transform: `rotate3d(1, 0, 0, ${-index * 20 % 360}deg) translate3d(0px, 0px, 100px)`
         }
       },
-      setWheelDeg (updateDeg, type, time = 1000) {
+      setWheelDeg(updateDeg, type, time = 1000) {
         if (type === 'end') {
           this.$refs.wheel.style.webkitTransition = `transform ${time}ms cubic-bezier(0.19, 1, 0.22, 1)`
           this.$refs.wheel.style.webkitTransform = `rotate3d(1, 0, 0, ${updateDeg}deg)`
@@ -98,7 +110,7 @@
           this.$refs.wheel.style.webkitTransform = `rotate3d(1, 0, 0, ${updateDeg}deg)`
         }
       },
-      setListTransform (translateY = 0, marginTop = 0, type, time = 1000) {
+      setListTransform(translateY = 0, marginTop = 0, type, time = 1000) {
         if (type === 'end') {
           this.$refs.list.style.webkitTransition = `transform ${time}ms cubic-bezier(0.19, 1, 0.22, 1)`
           this.$refs.list.style.webkitTransform = `translateY(${translateY - this.spin.branch * 34}px)`
@@ -111,14 +123,14 @@
           this.$refs.list.setAttribute('scroll', translateY)
         }
       },
-      itemTouchStart (event) {
+      itemTouchStart(event) {
         let finger = event.changedTouches[0]
         this.finger.startY = finger.pageY
         this.finger.startTime = event.timestamp || Date.now()
         this.finger.transformY = this.$refs.list.getAttribute('scroll')
         event.preventDefault()
       },
-      itemTouchMove (event) {
+      itemTouchMove(event) {
         let finger = event.changedTouches[0]
         this.finger.lastY = finger.pageY
         this.finger.lastTime = event.timestamp || Date.now()
@@ -127,7 +139,7 @@
         this.setStyle(move)
         event.preventDefault()
       },
-      itemTouchEnd (event) {
+      itemTouchEnd(event) {
         let finger = event.changedTouches[0]
         this.finger.lastY = finger.pageY
         this.finger.lastTime = event.timestamp || Date.now()
@@ -150,14 +162,16 @@
         }
       },
       /* 设置css */
-      setStyle (move, type, time) {
+      setStyle(move, type, time) {
         const singleHeight = 34
         const deg = 20
         const singleDeg = deg / singleHeight
         let currentListMove = this.finger.transformY
         let updateMove = move + Number(currentListMove)
-        /* 根据滚轮类型 line or cycle 判断 updateMove最大距离 */
-        if (this.type === 'line') {
+        let updateDeg, spinAim, margin, endMove, endDeg
+        if (type === 'end' && this.type === 'line') {
+          /*这里只在释放的时候判断 实现缓动效果*/
+          /* 根据滚轮类型 line or cycle 判断 updateMove最大距离 */
           if (updateMove > 0) {
             updateMove = 0
           }
@@ -165,12 +179,14 @@
             updateMove = -(this.listData.length - 1) * singleHeight
           }
         }
-        let updateDeg = -updateMove * singleDeg
-        let spinAim = Math.round(updateDeg / 20)
-        let margin = Math.round(updateMove / singleHeight) * singleHeight // 如果不这么写 会导致没有滚动效果
+        //todo 这里考虑后续设置能最大缓动的值 目前暂时不考虑
+
+        updateDeg = -updateMove * singleDeg
+        spinAim = Math.round(updateDeg / 20)
+        margin = Math.round(updateMove / singleHeight) * singleHeight // 如果不这么写 会导致没有滚动效果
         /* 计算touchEnd移动的整数距离 */
-        let endMove = margin
-        let endDeg = Math.round(updateDeg / deg) * deg
+        endMove = margin
+        endDeg = Math.round(updateDeg / deg) * deg
         if (type === 'end') {
           this.setListTransform(endMove, margin, type, time)
           this.setWheelDeg(endDeg, type, time)
@@ -183,23 +199,32 @@
         this.updateSpin(spinAim)
       },
       /* 更新spin */
-      updateSpin (spinAim) {
+      updateSpin(spinAim) {
         this.spin.start = this.spin.branch * -1 + spinAim
         this.spin.end = this.spin.start + this.spin.branch * 2
       },
       /* 获取spin 数据 */
-      getSpinData (index) {
+      getSpinData(index) {
         index = index % this.listData.length
         return this.listData[index >= 0 ? index : index + this.listData.length]
       },
       /* 获取选中值 */
-      getPickValue (move) {
-        let index = Math.round( Math.abs(move / 34) )
+      getPickValue(move) {
+        let index = Math.round(-move / 34)
         let pickValue = this.getSpinData(index)
         this.$emit('input', pickValue)
       }
     },
-    beforeDestroy () {
+    watch: {
+      value(val, oldValue) {
+//        if (val != oldValue) {
+//          //todo 会触发重复渲染，零时这样处理 需要对渲染函数做修改
+//          Object.assign(this.$data, this.$options.data());
+//          this.init(false);
+//        }
+      }
+    },
+    beforeDestroy() {
       this.$el.removeEventListener('touchstart', this.itemTouchStart)
       this.$el.removeEventListener('touchmove', this.itemTouchMove)
       this.$el.removeEventListener('touchend', this.itemTouchEnd)
@@ -225,6 +250,11 @@
         height: 220px;
         background: $color-background;
         position: relative;
+        & ul, li {
+          padding: 0;
+          list-style: none;
+          margin: 0;
+        }
       }
       &-ul {
         position: relative;

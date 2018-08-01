@@ -1,6 +1,3 @@
-/**
- * Created by k186 on 2017/11/14.
- */
 import pdSelectItem from './selectitem.vue'
 import pdSelectBox from './selectBox.vue'
 
@@ -17,10 +14,9 @@ const install = function (Vue) {
     install(window.Vue)
   }
 };
-module.exports={
+export default{
   install,
   components,
   pdSelectItem,
   pdSelectBox
 }
-
