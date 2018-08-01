@@ -167,7 +167,7 @@
         let currentListMove = this.finger.transformY
         let updateMove = move + Number(currentListMove)
         let updateDeg, spinAim, margin, endMove, endDeg
-        if (type === 'end') {
+        if (type === 'end' && this.type === 'line') {
           /*这里只在释放的时候判断 实现缓动效果*/
           /* 根据滚轮类型 line or cycle 判断 updateMove最大距离 */
           if (updateMove > 0) {
