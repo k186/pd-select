@@ -1,6 +1,6 @@
 {
   "name": "pd-select",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "a vue component,mobile wheel picker",
   "main": "src/components/index.js",
   "scripts": {
