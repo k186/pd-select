@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <pd-select-box style="position: fixed;bottom: 0;width: 100%">
-      <pd-select-item :listData="listData" v-model="month"></pd-select-item>
-      <pd-select-item :listData="listData2" type="cycle" v-model="day"></pd-select-item>
+      <pd-select-item ref="month" :listData="listData" v-model="month"></pd-select-item>
+      <pd-select-item ref="day" :listData="listData2" type="cycle" v-model="day"></pd-select-item>
     </pd-select-box>
   </div>
 </template>
@@ -27,6 +27,7 @@
     methods: {
       after () {
         this.day = 'customValue0'
+        this.$refs.day.init()
       }
     }
   }

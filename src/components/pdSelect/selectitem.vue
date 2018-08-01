@@ -72,19 +72,21 @@
       /* 初始化状态 */
       init(type) {
         let index, move
-        if (!type) {
-          index = this.listData.indexOf(this.value)
-          if (index === -1) {
-            console.warn('当前初始值不存在，请检查后listData范围！！')
-            this.setListTransform()
-            this.getPickValue(0)
-          } else {
-            move = index * 34
-            /* 因为往上滑动所以是负 */
-            this.setStyle(-move)
-            this.setListTransform(-move, -move)
+        this.$nextTick(()=>{
+          if (!type) {
+            index = this.listData.indexOf(this.value)
+            if (index === -1) {
+              console.warn('当前初始值不存在，请检查后listData范围！！')
+              this.setListTransform()
+              this.getPickValue(0)
+            } else {
+              move = index * 34
+              /* 因为往上滑动所以是负 */
+              this.setStyle(-move)
+              this.setListTransform(-move, -move)
+            }
           }
-        }
+        })
       },
       /* 根据type 控制滚轮显示效果 */
       setHidden(index) {
