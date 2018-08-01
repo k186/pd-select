@@ -89,7 +89,7 @@ Vue.use(pdSelect)
 ### manual init itemData (update value change view)   
 
 ```
-use $refs to manual update view just like demo
+use $refs to manual trigger component's init event to update view just like demo
 ```
 
 
