@@ -1,8 +1,8 @@
 {
   "name": "pd-select",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "a vue component,mobile wheel picker",
-  "main": "src/components/index.js",
+  "main": "src/components/pdSelect/index.js",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
