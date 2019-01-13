@@ -74,6 +74,7 @@
         let index, move
         this.$nextTick(()=>{
           if (!type) {
+            this.finger= {startY: 0, lastY: 0, startTime: 0, lastTime: 0, transformY: 0};
             index = this.listData.indexOf(this.value)
             if (index === -1) {
               console.warn('当前初始值不存在，请检查后listData范围！！')
